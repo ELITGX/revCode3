@@ -8,56 +8,47 @@ const productos = [
   {nombre: "Zapato rojo", tipo: "zapato", color: "rojo", img: "./zapato-rojo.jpg"}
 ]
 
-const li = document.getElementsByName("lista-de-productos")
-const $i = document.querySelector('.input');
+const contenedor = document.getElementById("lista-de-productos") // Se cambia el nombre de la variable porque es confuso y se obtiene el elemento por id en vez de name
+const input = document.getElementById("input-busqueda"); // Se acambia nombre de la variable y se cambia el querySelector por getElementById para usar el id que se agrego en el html
+const botonDeFiltro = document.querySelector("button"); // Se sube la variable para mejor orden del codigo
 
-for (let i = 0; i < productos.length; i++) {
-  var d = document.createElement("div")
+// Se encapsula el for en una funcion para renderizar la lista que se menciona abajo pero no se habia creado
+function displayProductos(productos){
+   contenedor.innerHTML = ""; // Se agrega esta linea para limpiar el contenedor antes de agregar nuevos elementos
+  for (let i = 0; i < productos.length; i++) {
+  const d = document.createElement("div") // Se cambia var por const
   d.classList.add("producto")
 
-  var ti = document.createElement("p")
+  const ti = document.createElement("p") // Se cambia var por const
   ti.classList.add("titulo")
   ti.textContent = productos[i].nombre
   
-  var imagen = document.createElement("img");
+  const imagen = document.createElement("img"); // Se cambia var por const
   imagen.setAttribute('src', productos[i].img);
 
   d.appendChild(ti)
   d.appendChild(imagen)
 
-  li.appendChild(d)
-}
-
-displayProductos(productos)
-const botonDeFiltro = document.querySelector("button");
-
-botonDeFiltro.onclick = function() {
-  while (li.firstChild) {
-    li.removeChild(li.firstChild);
-  }
-
-  const texto = $i.value;
-  console.log(texto);
-  const productosFiltrados = filtrado(productos, texto );
-
-  for (let i = 0; i < productosFiltrados.length; i++) {
-    var d = document.createElement("div")
-    d.classList.add("producto")
-  
-    var ti = document.createElement("p")
-    ti.classList.add("titulo")
-    ti.textContent = productosFiltrados[i].nombre
-    
-    var imagen = document.createElement("img");
-    imagen.setAttribute('src', productosFiltrados[i].img);
-  
-    d.appendChild(ti)
-    d.appendChild(imagen)
-  
-    li.appendChild(d)
+  contenedor.appendChild(d)
   }
 }
-
+// Se sube la funcion filtrado
 const filtrado = (productos = [], texto) => {
   return productos.filter(item => item.tipo.includes(texto) || item.color.includes(texto));
 }  
+
+displayProductos(productos); // Se agrega ;
+
+// Se borra codigo duplicado y se reutiliza la funcion de displayProductos
+botonDeFiltro.onclick = function() {
+  //se comenta el while
+  // while (li.firstChild) {
+  //   li.removeChild(li.firstChild);
+  // }
+
+  const texto = input.value; //Se cambia nombre de variable que cambiamos arriba
+  //console.log(texto); //Consol log inecesario se comenta
+  const productosFiltrados = filtrado(productos, texto );
+  displayProductos(productosFiltrados);
+}
+
